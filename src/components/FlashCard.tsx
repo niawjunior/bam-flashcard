@@ -62,7 +62,7 @@ const FlashcardContainer = ({
 }) => {
   return (
     <div className="flex justify-center flex-col items-center gap-4">
-      {words.map((item, index) => (
+      {words?.map((item, index) => (
         <Flashcard
           key={index}
           word={item.word}
