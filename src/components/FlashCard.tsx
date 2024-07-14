@@ -1,15 +1,21 @@
 import { useState } from "react"
 import { CiCircleRemove } from "react-icons/ci"
 import { FiEdit2 } from "react-icons/fi"
+import TimeAgo from "javascript-time-ago"
+import en from "javascript-time-ago/locale/en"
+TimeAgo.addDefaultLocale(en)
+const timeAgo = new TimeAgo("en-US")
 
 const Flashcard = ({
   word,
   meaning,
+  createdDate,
   handleRemove,
   handleEdit,
 }: {
   word: string
   meaning: string
+  createdDate: Date
   handleRemove: (word: string) => void
   handleEdit: (word: string) => void
 }) => {
@@ -29,22 +35,29 @@ const Flashcard = ({
           {meaning}
         </div>
         {!isFlipped && (
-          <div className="flex">
-            <CiCircleRemove
-              onClick={(e) => {
-                e.stopPropagation() // Prevent the flip when clicking the remove button
-                handleRemove(word)
-              }}
-              className="absolute top-2 right-2 text-red-300"
-            />
-            <FiEdit2
-              onClick={(e) => {
-                e.stopPropagation() // Prevent the flip when clicking the remove button
-                handleEdit(word)
-              }}
-              className="absolute bottom-2 right-2 text-yellow-300"
-            />
-          </div>
+          <>
+            <div className="text-xs absolute z-10 p-2 text-gray-400">
+              {createdDate.toLocaleDateString()}
+              {" | "}
+              {timeAgo.format(new Date(createdDate))}
+            </div>
+            <div className="flex">
+              <CiCircleRemove
+                onClick={(e) => {
+                  e.stopPropagation() // Prevent the flip when clicking the remove button
+                  handleRemove(word)
+                }}
+                className="absolute top-2 right-2 text-red-300"
+              />
+              <FiEdit2
+                onClick={(e) => {
+                  e.stopPropagation() // Prevent the flip when clicking the remove button
+                  handleEdit(word)
+                }}
+                className="absolute bottom-2 right-2 text-yellow-300"
+              />
+            </div>
+          </>
         )}
       </div>
     </div>
@@ -56,17 +69,18 @@ const FlashcardContainer = ({
   handleRemove,
   handleEdit,
 }: {
-  words: { word: string; meaning: string }[]
+  words: { word: string; meaning: string; createdDate: Date }[]
   handleRemove: (word: string) => void
   handleEdit: (word: string) => void
 }) => {
   return (
-    <div className="flex justify-center flex-col items-center gap-4">
+    <div className="flex justify-center flex-col items-center gap-4 lg:w-[700px] m-auto">
       {words?.map((item, index) => (
         <Flashcard
           key={index}
           word={item.word}
           meaning={item.meaning}
+          createdDate={item.createdDate}
           handleRemove={handleRemove}
           handleEdit={handleEdit}
         />
