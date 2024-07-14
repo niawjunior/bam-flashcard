@@ -46,7 +46,7 @@ function App() {
   return (
     <>
       <Layout>
-        {words.length === 0 && !isLoading && (
+        {words?.length === 0 && !isLoading && (
           <div className="flex flex-col justify-center items-center h-[70vh]">
             <div className="text-3xl font-bold text-orange-600">
               Vocabulary not found
